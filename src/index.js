@@ -6,30 +6,26 @@ const manager = new ProductManager('./src/products.txt');
 
 
 const app = express()
-const PORT = 4000
+const PORT = 8080
 
 app.use(express.urlencoded({extended: true}))
 
 app.get('/productos', (req, res) => {
-    let {categoria} = req.query;
+    let {categoria, limit} = req.query;
     let products = manager.filterProductsByCategory(categoria);
+    products = manager.getAllProducts(limit);
     res.json(products);
     console.log(products)
 });
- 
-app.get('/productos/:id', (req, res)=>{
-    let product = manager.getProductById(req.params.id)
-    res.json(product)
-    console.log(product)
-})
 
-app.get('/todos_los_productos', (req, res) => {
-    let {limit} = req.query;
-    let products = manager.getAllProducts();
-    let limitedProducts = products.slice(0, limit);
-    res.json(limitedProducts);
-});
-
+app.get('/productos/:id', (req, res) => {
+    let product = manager.getProductById(req.params.id);
+    if (!product || product.id === undefined) {
+    res.json({error: "No existe el producto"});
+    } else {
+    res.json(product);
+    }
+});  
 app.get('/', (req, res) => {
     res.send("hola esta es la pagina de inicio")
 })
