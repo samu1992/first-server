@@ -73,7 +73,7 @@ let db = new ProductManager('./src/products.txt');
 
 //db.deleteProduct(3);
 //db.getProductById(16);
-console.log(db.getProductById(16));
+//console.log(db.getProductById(16));
 //db.updateProduct(6, {id: 4, name: "botas de cuero", price: 1000, description: "cuero", stock: 2, image: "sin imagen", code: "123abc"})
 //console.log(db.getProducts());
 export { ProductManager }

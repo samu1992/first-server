@@ -8,14 +8,18 @@ const manager = new ProductManager('./src/products.txt');
 const app = express()
 const PORT = 8080
 
+app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
 app.get('/productos', (req, res) => {
-    let {categoria, limit} = req.query;
-    let products = manager.filterProductsByCategory(categoria);
-    products = manager.getAllProducts(limit);
+    let {limit} = req.query;
+    let products = manager.getAllProducts(limit);
     res.json(products);
     console.log(products)
+});
+app.get('/productos/:categoria', (req, res) => {
+    let products = manager.filterProductsByCategory(req.params.categoria);
+    res.json(products.categoria);
 });
 
 app.get('/productos/:id', (req, res) => {
@@ -26,6 +30,16 @@ app.get('/productos/:id', (req, res) => {
     res.json(product);
     }
 });  
+app.post('/productos', (req, res) => {
+    let product = manager.addProduct(req.body)
+    res.json(product);
+}); 
+
+app.delete('/productos/:id', (req, res) => {
+    let product = manager.deleteProduct(req.params.id)
+    res.json(product);
+});
+
 app.get('/', (req, res) => {
     res.send("hola esta es la pagina de inicio")
 })
