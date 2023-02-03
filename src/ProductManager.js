@@ -1,4 +1,3 @@
-
 import fs from 'fs';
 class ProductManager {
     constructor(path) {
@@ -6,7 +5,7 @@ class ProductManager {
         this.products = [];
     }
     
-    addProduct(name, price, description, stock, image, code, categoria) {
+    addProduct(name, price, description, stock, image, categoria) {
         let product = {
             id: this.getNextId(),
             name: name,
@@ -14,12 +13,12 @@ class ProductManager {
             description: description,
             stock: stock,
             image: image,
-            code: code,
             categoria: categoria
         };
         let products = this.getProducts();
         products.push(product);
         fs.writeFileSync(this.path, JSON.stringify(products));
+        return product;
     }
 
     getProducts() {
@@ -40,14 +39,13 @@ class ProductManager {
 
     getProductById(id) {
         let products = this.getProducts();
-        let product = products.find(p => p.id == id);
+        let product = products.find(p => p.id === parseInt(id));
         return product;
-        console.log(product);
     }
 
     updateProduct(id, product) {
         let products = this.getProducts();
-        let index = products.findIndex(p => p.id == id);
+        let index = products.findIndex(p => p.id === id);
         products[index] = product;
         fs.writeFileSync(this.path, JSON.stringify(products));
     }
@@ -56,6 +54,7 @@ class ProductManager {
         let products = this.getProducts();
         products = products.filter(p => p.id != id);
         fs.writeFileSync(this.path, JSON.stringify(products));
+        return products;
     }
 
     getAllProducts(limit) {
@@ -71,9 +70,5 @@ class ProductManager {
 } 
 let db = new ProductManager('./src/products.txt');
 
-//db.deleteProduct(3);
-//db.getProductById(16);
-//console.log(db.getProductById(16));
-//db.updateProduct(6, {id: 4, name: "botas de cuero", price: 1000, description: "cuero", stock: 2, image: "sin imagen", code: "123abc"})
-//console.log(db.getProducts());
-export { ProductManager }
+bien
+export { ProductManager }   

@@ -15,23 +15,23 @@ app.get('/productos', (req, res) => {
     let {limit} = req.query;
     let products = manager.getAllProducts(limit);
     res.json(products);
-    console.log(products)
 });
 app.get('/productos/:categoria', (req, res) => {
     let products = manager.filterProductsByCategory(req.params.categoria);
-    res.json(products.categoria);
+    res.json(products);
 });
 
 app.get('/productos/:id', (req, res) => {
     let product = manager.getProductById(req.params.id);
-    if (!product || product.id === undefined) {
-    res.json({error: "No existe el producto"});
+    if (product === null) {
+        res.json({error: "No existe el producto"});
     } else {
-    res.json(product);
+        res.json(product);
     }
-});  
+});
+
 app.post('/productos', (req, res) => {
-    let product = manager.addProduct(req.body)
+    let product = manager.addProduct(req.body.name, req.body.price, req.body.description, req.body.stock, req.body.image, req.body.code, req.body.categoria);
     res.json(product);
 }); 
 
