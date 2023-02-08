@@ -1,11 +1,11 @@
 import express from "express";
 import routerProd from './routes/product.js'
-import productCartRouter from "./routes/productCart.js";
+import ProductCartRouter from "./routes/productCart.js";
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
 import multer from 'multer'
 
-//const upload = multer({dest:'src/public/img'}) sin formato
+
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -30,12 +30,11 @@ app.use(express.urlencoded({ extended: true }))
 //Routes
 app.use('/static', express.static(__dirname + '/public'))
 app.use('/api/product', routerProd)
-app.use('/api', productCartRouter)
+app.use('/api', ProductCartRouter)
 
 app.post('/upload', upload.single('product'), (req, res) => {
     console.log(req.file)
     console.log(req.body)
-    //req.body() no tiene la info del archivo
     res.send("Imagen cargada")
 })
 

@@ -13,9 +13,9 @@ export class ProductManagerCart {
         return "Producto agregado"
     }
 
-    async updateProduct(productId, updatedProduct) {
+    async updateProduct(id, updatedProduct) {
         const products = await this.getProducts()
-        const productIndex = products.findIndex(p => p.id === productId)
+        const productIndex = products.findIndex(p => p.id === id)
         if (productIndex === -1) {
             return 'Producto no encontrado'
         }
@@ -27,7 +27,7 @@ export class ProductManagerCart {
     async deleteProduct(productId) {
         const products = await this.getProducts()
         const productIndex = products.findIndex(p => p.id === productId)
-        if (productIndex === -1) {
+        if (productIndex < 1) {
             return 'Producto no encontrado'
         }
         products.splice(productIndex, 1)
@@ -35,7 +35,7 @@ export class ProductManagerCart {
         return "Producto eliminado"
     }
 
-    async getProducts() {
+    async getProducts(id) {
         try {
             const products = JSON.parse(await fs.readFile(this.path, 'utf-8'))
             return products
