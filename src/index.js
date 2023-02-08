@@ -1,55 +1,43 @@
-import express from 'express';
-import { ProductManager } from './ProductManager.js'
+import express from "express";
+import routerProd from './routes/product.js'
+import routerCart from "./routes/productCart.js";
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
+import multer from 'multer'
 
 
-const manager = new ProductManager('./src/products.txt');
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'src/public/img')
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}${file.originalname}`)
+    }
+})
 
+const upload = multer({ storage: storage })
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 const app = express()
 const PORT = 8080
 
+//Middlewares
 app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({ extended: true }))
 
-app.get('/productos', (req, res) => {
-    let {limit} = req.query;
-    let products = manager.getAllProducts(limit);
-    res.json(products);
-});
-app.get('/productos/:categoria', (req, res) => {
-    let products = manager.filterProductsByCategory(req.params.categoria);
-    res.json(products);
-});
+//Routes
+app.use('/static', express.static(__dirname + '/public'))
+app.use('/api/product', routerProd)
+app.use('/api/cart', routerCart)
 
-app.get('/productos/:id', (req, res) => {
-    let product = manager.getProductById(req.params.id);
-    if (product === null) {
-        res.json({error: "No existe el producto"});
-    } else {
-        res.json(product);
-    }
-});
-
-app.post('/productos', (req, res) => {
-    let product = manager.addProduct(req.body.name, req.body.price, req.body.description, req.body.stock, req.body.image, req.body.code, req.body.categoria);
-    res.json(product);
-}); 
-
-app.delete('/productos/:id', (req, res) => {
-    let product = manager.deleteProduct(req.params.id)
-    res.json(product);
-});
-
-app.get('/', (req, res) => {
-    res.send("hola esta es la pagina de inicio")
+app.post('/upload', upload.single('product'), (req, res) => {
+    console.log(req.file)
+    console.log(req.body)
+    //req.body() no tiene la info del archivo
+    res.send("Imagen cargada")
 })
 
-app.get('/user', (req, res) => {
-    let {nombre, apellido}= req.query
-    console.log(nombre, apellido)
-    res.send("user route")
-})
-
-app.listen(PORT, ()=>{
-    console.log(`server on port ${PORT}`)
+app.listen(PORT, () => {
+    console.log(`Server on port ${PORT}`)
 })
