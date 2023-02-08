@@ -1,34 +1,38 @@
 import { promises as fs } from 'fs'
 
-export class CartManager {
+export class ProductManagerCart {
     constructor(path) {
         this.path = path
     }
 
-    async addProduct(productId, quantity) {
+    async addProduct(product) {
         const products = await this.getProducts()
-        const productIndex = products.findIndex(p => p.id === productId)
-        if (productIndex === -1) {
-            return 'Producto no encontrado en el carrito'
-        }
-        products[productIndex].quantity = (products[productIndex].quantity || 0) + quantity
+        product.id = products.length + 1
+        products.push(product)
         await fs.writeFile(this.path, JSON.stringify(products))
-        return "Producto agregado al carrito"
+        return "Producto agregado"
     }
 
-    async removeProduct(productId, quantity) {
+    async updateProduct(productId, updatedProduct) {
         const products = await this.getProducts()
         const productIndex = products.findIndex(p => p.id === productId)
         if (productIndex === -1) {
-            return 'Producto no encontrado en el carrito'
+            return 'Producto no encontrado'
         }
-        if (products[productIndex].quantity <= quantity) {
-            products.splice(productIndex, 1)
-        } else {
-            products[productIndex].quantity -= quantity
-        }
+        Object.assign(products[productIndex], updatedProduct)
         await fs.writeFile(this.path, JSON.stringify(products))
-        return "Producto eliminado del carrito"
+        return "Producto actualizado"
+    }
+
+    async deleteProduct(productId) {
+        const products = await this.getProducts()
+        const productIndex = products.findIndex(p => p.id === productId)
+        if (productIndex === -1) {
+            return 'Producto no encontrado'
+        }
+        products.splice(productIndex, 1)
+        await fs.writeFile(this.path, JSON.stringify(products))
+        return "Producto eliminado"
     }
 
     async getProducts() {
@@ -39,14 +43,77 @@ export class CartManager {
             return error
         }
     }
+}
 
-    async getTotal() {
-        const products = await this.getProducts()
-        return products.reduce((sum, p) => sum + p.price * (p.quantity || 1), 0)
+export class CartManager {
+    constructor(path) {
+        this.path = path
     }
 
-    async clearCart() {
-        await fs.writeFile(this.path, JSON.stringify([]))
-        return 'Carrito de compras vaciado'
+    async addToCart(cartId, productId, quantity) {
+        const carts = await this.getCarts()
+        const cartIndex = carts.findIndex(c => c.id === cartId)
+        if (cartIndex === -1) {
+            return 'Carrito no encontrado'
+        }
+        const cart = carts[cartIndex]
+        const productIndex = cart.products.findIndex(p => p.product === productId)
+        if (productIndex === -1) {
+            cart.products.push({ product: productId, quantity: quantity })
+        } else {
+            cart.products[productIndex].quantity += quantity
+        }
+        await fs.writeFile(this.path, JSON.stringify(carts))
+        return "Producto agregado al carrito"
+    }
+
+    async getCart(cartId) {
+        const carts = await this.getCarts()
+        const cartIndex = carts.findIndex(c => c.id === cartId)
+        if (cartIndex === -1) {
+            return 'Carrito no encontrado'
+        }
+        return carts[cartIndex]
+    }
+
+    async getCarts() {
+        try {
+            const carts = JSON.parse(await fs.readFile(this.path, 'utf-8'))
+            return carts
+        } catch (error) {
+            return error
+        }
+    }
+
+    async createCart() {
+        const carts = await this.getCarts()
+        const id = carts.length + 1
+        const newCart = { id, products: [] }
+        carts.push(newCart)
+        await fs.writeFile(this.path, JSON.stringify(carts))
+        return newCart
+    }
+
+    async getCart(cartId) {
+        const carts = await this.getCarts()
+        const cart = carts.findIndex(c => c.id === cartId)
+        return cart || null
+    }
+
+    async addProductToCart(cartId, productId, quantity) {
+        const carts = await this.getCarts()
+        const cartIndex = carts.findIndex(c => c.id === cartId)
+        if (cartIndex === -1) {
+            return 'El carrito con el id proporcionado no fue encontrado'
+        }
+        const cart = carts[cartIndex]
+        const productIndex = cart.products.findIndex(p => p.product === productId)
+        if (productIndex === -1) {
+            cart.products.push({ product: productId, quantity })
+        } else {
+            cart.products[productIndex].quantity += quantity
+        }
+        await fs.writeFile(this.path, JSON.stringify(carts))
+        return cart
     }
 }

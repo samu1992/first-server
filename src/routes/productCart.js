@@ -1,32 +1,44 @@
 import { Router } from "express";
-import { CartManager } from "../controllers/CartManager.js";
-const cartManager = new CartManager('src/models/ProductCart.txt')
-const routerCart = Router()
+import { ProductManagerCart, CartManager } from "../controllers/CartManager.js";
 
-routerCart.get('/', async (req, res) => { 
-    const carts = await cartManager.getProducts()
-    res.send(JSON.stringify(carts))
+const productCartRouter = Router()
+const productManagerCart = new ProductManagerCart('src/models/ProductCart.txt')
+const cartManager = new CartManager('src/models/Cart.txt')
+
+
+productCartRouter.post('/products', async (req, res) => {
+    const result = await productManagerCart.addProduct(req.body)
+    res.send({ result })
 })
 
-routerCart.get('/:id', async (req, res) => { 
-    const products = await cartManager.getProducts()
-    const cart = products.find(p => p.id === req.params.id)
-    res.send(JSON.stringify(cart))
+productCartRouter.put('/products/:id', async (req, res) => {
+    const result = await productManagerCart.updateProduct(req.params.id, req.body)
+    res.send({ result })
 })
 
-routerCart.post('/', async (req, res) => { 
-    let mensaje = await cartManager.addProduct(req.body.productId, req.body.quantity)
-    res.send(mensaje)
+productCartRouter.delete('/products/:id', async (req, res) => {
+    const result = await productManagerCart.deleteProduct(req.params.id)
+    res.send({ result })
 })
 
-routerCart.delete('/:id', async (req, res) => {
-    let mensaje = await cartManager.removeProduct(req.params.id, req.body.quantity) 
-    res.send(mensaje)
+productCartRouter.get('/products', async (req, res) => {
+    const products = await productManagerCart.getProducts()
+    res.send({ products })
 })
 
-routerCart.put('/:id', async (req, res) => { 
-    let mensaje = await cartManager.updateCart(req.params.id, req.body)
-    res.send(mensaje)
+productCartRouter.post('/carts', async (req, res) => {
+    const cart = await cartManager.createCart()
+    res.send({ cart })
 })
 
-export default routerCart 
+productCartRouter.get('/carts/:id', async (req, res) => {
+    const cart = await cartManager.getCart(req.params.id)
+    res.send({ cart })
+})
+
+productCartRouter.post('/carts/:cartId/products/:productId', async (req, res) => {
+    const result = await cartManager.addProductToCart(req.params.cartId, req.params.productId, req.body.quantity)
+    res.send({ result })
+})
+
+export default productCartRouter
