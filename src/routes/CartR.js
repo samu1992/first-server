@@ -31,11 +31,11 @@ CartRouter.post('/cart', async (req, res) => {
     res.status(201).json(newCart)
 })
 
-CartRouter.post('/carts/:cartId/products/:productId', async (req, res) => {
+CartRouter.post('/cart/:cartId/product/:productId', async (req, res) => {
     const cartId = req.params.cartId
     const productId = req.params.productId
     const quantity = req.body.quantity
-    const result = await cartManager.addProductToCart(cartId, productId, quantity)
+    const result = await cartManager.addToCart(cartId, productId, quantity)
     if (typeof result === 'string') {
         res.status(404).send(result)
     } else {

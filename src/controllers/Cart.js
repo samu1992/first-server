@@ -5,14 +5,14 @@ export class CartManager {
         this.path = path
     }
 
-    async addToCart(cartId, productId, quantity) {
+   async addToCart(cartId, productId, quantity) {
         const carts = await this.getCarts()
-        const cartIndex = carts.findIndex(c => c.id === cartId)
+        const cartIndex = carts.findIndex(c => c.id === parseInt(cartId))
         if (cartIndex === -1) {
             return 'Carrito no encontrado'
         }
         const cart = carts[cartIndex]
-        const productIndex = cart.products.findIndex(p => p.product === productId)
+        const productIndex = cart.products.findIndex(p => p.product === parseInt(productId))
         if (productIndex === -1) {
             cart.products.push({ product: productId, quantity: quantity })
         } else {
@@ -56,14 +56,14 @@ export class CartManager {
         return 'El carrito fue eliminado'
     }
 
-    async addProductToCart(cartId, productId, quantity) {
+   /*  async addProductToCart(cartId, productId, quantity) {
         const carts = await this.getCarts()
-        const cartIndex = carts.findIndex(c => c.id === cartId)
+        const cartIndex = carts.findIndex(c => c.id === parseInt(cartId))
         if (cartIndex === -1) {
             return 'El carrito con el id proporcionado no fue encontrado'
         }
         const cart = carts[cartIndex]
-        const productIndex = cart.products.findIndex(p => p.product === productId)
+        const productIndex = cart.products.findIndex(p => p.product === parseInt(productId))
         if (productIndex === -1) {
             cart.products.push({ product: productId, quantity })
         } else {
@@ -71,5 +71,5 @@ export class CartManager {
         }
         await fs.writeFile(this.path, JSON.stringify(carts))
         return cart
-    }
+    } */
 }
