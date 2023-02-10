@@ -1,5 +1,5 @@
 import express from "express";
-import ProductCartRouter from "./routes/products.js";
+import ProductRouter from "./routes/products.js";
 import CartRouter from "./routes/CartR.js";
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }))
 
 //Routes
 app.use('/static', express.static(__dirname + '/public'))
-app.use('/api/product', ProductCartRouter)
+app.use('/api/product', ProductRouter)
 app.use('/api', CartRouter)
 
 app.post('/upload', upload.single('product'), (req, res) => {

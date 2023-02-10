@@ -61,3 +61,33 @@ export class CartManager {
         return 'El carrito fue eliminado'
     }
 }
+//todos los productos
+//http://localhost:8080/api/product/
+
+//un producto
+//http://localhost:8080/api/product/1
+
+//agregar  product
+//http://localhost:8080/api/product/
+
+//actualizar el product
+//http://localhost:8080/api/product/1
+
+//borrar el product
+//http://localhost:8080/api/product/1
+
+//limite de productos
+//http://localhost:8080/api/product?limit=2
+
+//todos los carritos
+//http://localhost:8080/api/cart/
+
+//un carrito
+//http://localhost:8080/api/cart/1
+
+//agregar un producto al carrito
+//http://localhost:8080/api/cart/1/product/1
+//pasar por body quantity
+
+//borrar un carrito
+//http://localhost:8080/api/cart/1
