@@ -16,6 +16,11 @@ CartRouter.get('/cart/:cartId', async (req, res) => {
     }
 })
 
+CartRouter.get('/cart', async (req, res) => {
+    const carts = await cartManager.getCarts()
+    res.json(carts)
+})
+
 CartRouter.delete('/cart/:cartId', async (req, res) => {
     const { cartId: cartIdString } = req.params
     const cartId = parseInt(cartIdString, 10)

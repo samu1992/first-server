@@ -1,5 +1,5 @@
 import express from "express";
-import ProductCartRouter from "./routes/productCart.js";
+import ProductCartRouter from "./routes/products.js";
 import CartRouter from "./routes/CartR.js";
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'

@@ -22,14 +22,13 @@ export class ProductManager {
         return "Producto creado"
     }
 
-    async getProducts() {
+    async getProducts(limit) {
         try {
             const prods = JSON.parse(await fs.readFile(this.path, 'utf-8'))
-            return prods
+            return prods.slice(0, limit)
         } catch (error) {
             return error
         }
-
     }
 
     async getProductById(id) {
@@ -41,7 +40,7 @@ export class ProductManager {
         }
     }
 
-    async updateProduct(id, { title, description, price, thumbnail, code, stock }) {
+    async updateProduct(id, { title, description, price, thumbnail, code, stock, status, category }) {
         const prods = JSON.parse(await fs.readFile(this.path, 'utf-8'))
         if (prods.some(prod => prod.id === parseInt(id))) {
             let index = prods.findIndex(prod => prod.id === parseInt(id))
@@ -51,6 +50,8 @@ export class ProductManager {
             prods[index].thumbnail = thumbnail
             prods[index].code = code
             prods[index].stock = stock
+            prods[index].status = status
+            prods[index].category = category
             await fs.writeFile(this.path, JSON.stringify(prods))
             return "Producto actualizado"
         } else {

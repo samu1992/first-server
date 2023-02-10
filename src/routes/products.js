@@ -1,43 +1,41 @@
 import router from 'express'
-import { CartProductManager } from "../controllers/CartManager.js";
+import { ProductManager } from "../controllers/ProductManager.js";
 
 
 
-const cartProductManager = new CartProductManager('src/models/ProductCart.json')
+const productManager = new ProductManager('src/models/products.txt')
 const ProductCartRouter = router()
 
 
 
 ProductCartRouter.get('/', async (req, res) => { 
     const { limit } = req.query; 
-    console.log(limit)
-    const productos = await cartProductManager.getProducts()
-    console.log(productos)
+    const productos = await productManager.getProducts(limit)
     res.send(JSON.stringify(productos))
 })
 
 ProductCartRouter.get('/:id', async (req, res) => {
     const productId = req.params.id
-    const product = await cartProductManager.getProductById(productId)
+    const product = await productManager.getProductById(productId)
     res.send({product})
 })
 
 ProductCartRouter.post('/', async (req, res) => {
     const product = req.body
-    const message = await cartProductManager.addProduct(product)
+    const message = await productManager.addProduct(product)
     res.send(message)
 })
 
 ProductCartRouter.put('/:id', async (req, res) => {
     const productId = req.params.id
     const updatedProduct = req.body
-    const message = await cartProductManager.updateProduct(productId, updatedProduct)
+    const message = await productManager.updateProduct(productId, updatedProduct)
     res.send(message)
 })
 
 ProductCartRouter.delete('/:id', async (req, res) => {
     const productId = req.params.id
-    const message = await cartProductManager.deleteProduct(productId)
+    const message = await productManager.deleteProduct(productId)
     res.send(message)
 })
 
