@@ -1,1 +1,32 @@
-[{"title":"Botas de Dama","description":"Botas, temporada invierno","price":"USD 75","code":"123abk","stock":36,"category":"mujer","status":"true","thumbnail":"thumbnail","id":1},{"title":"botas","description":"Botas de Dama","price":"USD 80","code":"123abc","stock":46,"category":"mujer","status":"true","thumbnail":"thumbnail","id":2},{"title":"Zapato Casual","description":"Casual Urbano","price":"USD 52","code":"123abd","stock":65,"category":"hombre","status":"true","thumbnail":"thumbnail","id":3},{"title":"Botas","description":"Botas,temporada invierno","price":"USD 120","code":"123abe","stock":41,"category":"mujer","status":"true","thumbnail":"thumbnail","id":4},{"id":5,"title":"Botas de lluvia","description":"Botas altas de lluvia","price":"USD 86","thumbnail":"thumbnail","code":"456hsg","stock":"22","status":"true","category":"mujer"},{"title":"Zapatillas de Dama","description":"Temporada de Verano","price":"USD 88","code":"123abg","stock":44,"category":"mujer","status":"true","thumbnail":"thumbnail","id":6},{"title":"Zapato Formal","description":"Temporada de Verano","price":"USD 44","code":"123abh","stock":65,"category":"hombre","status":"true","thumbnail":"thumbnail","id":7},{"title":"Zapato casual","description":"Temporada de Verano","price":"USD 85","code":"123abh","stock":62,"category":"mujer","status":"true","thumbnail":"thumbnail","id":8},{"title":"Zapato informal","description":"Zapato de gamuza","price":"USD 78","code":"123abj","stock":45,"category":"hombre","status":"true","thumbnail":"thumbnail","id":9}]
+[
+  {
+    "title": "zapatos de Dama",
+    "price": "65",
+    "thumbnail": "sin imagen",
+    "description": "casuales",
+    "stock": "65",
+    "code": "123a",
+    "category": "mujer",
+    "id": 1
+  },
+  {
+    "title": "Botas ",
+    "price": "85",
+    "thumbnail": "sin imagen",
+    "description": "Borcego",
+    "stock": "22",
+    "code": "123b",
+    "category": "mujer",
+    "id": 2
+  },
+  {
+    "title": "Botas de lluvia",
+    "price": "35",
+    "thumbnail": "sin imagen",
+    "description": "invierno",
+    "stock": "33",
+    "code": "123c",
+    "category": "mujer",
+    "id": 3
+  }
+]
