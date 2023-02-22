@@ -4,18 +4,19 @@ const socket = io();
 
 socket.on('productos', (data) => {
     console.log(data);
+    document.getElementById('productos-container').innerHTML = '';
     data.forEach(element => {
         // Crea el elemento de lista para el producto
         const productElement = document.createElement('ul');
         productElement.id = `producto-${element.id}`;
         productElement.innerHTML = `
-          <li>Nombre: ${element.title}</li>
-          <li>Precio: ${element.price}</li>
-          <li>Stock: ${element.stock}</li>
-          <li>Descripción: ${element.description}</li>
-          <li>Id: ${element.id}</li>
-          <li>Código: ${element.code}</li>
-          <li>Código: ${element.category}</li>
+        <li>Nombre: ${element.title}</li>
+        <li>Precio: ${element.price}</li>
+        <li>Stock: ${element.stock}</li>
+        <li>Descripción: ${element.description}</li>
+        <li>Id: ${element.id}</li>
+        <li>Código: ${element.code}</li>
+        <li>Código: ${element.category}</li>
         `;
 
         // Crea el botón de eliminación y lo agrega al elemento de lista del producto

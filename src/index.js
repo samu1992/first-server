@@ -41,9 +41,6 @@ app.engine("handlebars", engine())
 app.set("view engine", "handlebars")
 app.set("views", path.resolve(__dirname, "./views"))
 
-
-
-
 io.on("connection", (socket) => {
     console.log("conectado con socket")
 
@@ -89,8 +86,15 @@ app.use('/api', CartRouter)
 
 app.get('/realtimeproducts', async (req, res) => {
     res.render("realTimesProducts", {
-        title: "Home",
-        mensaje: "Bienvenido a mi sitio",
+        title: "productos",
+        mensaje: "Productos",
+        productos
+    })
+})
+app.get('/', async (req, res) => {
+    res.render("inicio", {
+        title: "Inicio",
+        mensaje: "Pagina de Inicio",
         productos
     })
 })

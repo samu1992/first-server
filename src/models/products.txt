@@ -1,31 +1,31 @@
 [
   {
-    "title": "zapatos de Dama",
+    "title": "zapatos deportivos",
     "price": "65",
     "thumbnail": "sin imagen",
-    "description": "casuales",
-    "stock": "65",
-    "code": "123a",
-    "category": "mujer",
+    "description": "zapatillas adidas",
+    "stock": "25",
+    "code": "wd5",
+    "category": "hombre",
     "id": 1
   },
   {
-    "title": "Botas ",
-    "price": "85",
+    "title": "zapatos casuales",
+    "price": "25",
     "thumbnail": "sin imagen",
-    "description": "Borcego",
-    "stock": "22",
-    "code": "123b",
-    "category": "mujer",
+    "description": "zapatos casuales de gamuza",
+    "stock": "65",
+    "code": "wd5162",
+    "category": "hombre",
     "id": 2
   },
   {
-    "title": "Botas de lluvia",
+    "title": "botas de lluvia",
     "price": "35",
     "thumbnail": "sin imagen",
     "description": "invierno",
-    "stock": "33",
-    "code": "123c",
+    "stock": "65",
+    "code": "wd5162sc",
     "category": "mujer",
     "id": 3
   }
