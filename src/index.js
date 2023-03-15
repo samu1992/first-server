@@ -10,6 +10,8 @@ import { Server } from "socket.io";
 //import routerSocket from "./routes/socket.js";
 import fs from 'fs'
 import { ProductManager } from "./controllers/ProductManager.js";
+import userRouter from "./routes/user.js";
+import mongoose from "mongoose";
 
 let productos = []
 
@@ -24,6 +26,15 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+mongoose.connect('mongodb+srv://samuelcarrizot:Soley1912@cluster0.75eou1e.mongodb.net/?retryWrites=true&w=majority')
+    .then(() => {
+        console.log('Conectado a la base de datos de MongoDB Atlas')
+    })
+    .catch((error) => {
+        console.error('Error al conectar a la base de datos:', error.message)
+        process.exit()
+    })
 
 const app = express()
 const PORT = 8080
@@ -83,6 +94,7 @@ app.use('/', express.static(__dirname + '/public'))
 app.use('/api/product', ProductRouter)
 app.use('/api', CartRouter)
 //app.use('/', routerSocket)
+app.use('/users', userRouter)
 
 app.get('/realtimeproducts', async (req, res) => {
     res.render("realTimesProducts", {
