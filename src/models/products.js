@@ -1,16 +1,33 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
-const productSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    description: { type: String, required: true },
-    price: { type: Number, required: true },
-    thumbnail: { type: String, required: true },
-    code: { type: String, required: true },
-    stock: { type: Number, required: true },
-    status: { type: String, required: true },
-    category: { type: String, required: true },
-});
+let Product;
 
-const Product = mongoose.model('Product', productSchema);
+try {
+    Product = mongoose.model('Product');
+} catch (error) {
+    const productSchema = new mongoose.Schema({
+        title: { type: String, required: true },
+        description: { type: String, required: true },
+        price: { type: Number, required: true },
+        thumbnail: { type: String, required: true },
+        code: { type: String, required: true },
+        stock: { type: Number, required: true },
+        status: { type: String, required: true },
+        category: { type: String, required: true },
+    });
 
-module.exports = Product;
+    Product = mongoose.model('Product', productSchema);
+}
+
+export default Product;
+
+/* {
+    "title":"zapatillas",
+    "description":"nike",
+    "price":"35",
+    "thumbnail":"thumbnail",
+    "code":"1515awda",
+    "stock":"25",
+    "status":"true",
+    "category":"hombre"
+} */

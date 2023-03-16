@@ -1,8 +1,10 @@
 import { promises as fs } from 'fs'
+import ProductManager from './productManager.js'
 
 export class CartManager {
-    constructor(path) {
+    constructor(path, connectionString, dbName) {
         this.path = path
+        this.productManager = new ProductManager(connectionString, dbName)
     }
 
     async addToCart(cartId, productId, quantity) {
@@ -10,6 +12,13 @@ export class CartManager {
         const cart = carts.find(c => c.id === parseInt(cartId));
         if (!cart) {
             return 'Carrito no encontrado';
+        }
+        const product = await this.productManager.getProductById(productId);
+        if (!product) {
+            return 'Producto no encontrado';
+        }
+        if (product.stock < quantity) {
+            return 'No hay suficiente stock disponible';
         }
         let newProduct = { product: parseInt(productId), quantity: parseInt(quantity) };
         let exists = false;
@@ -59,35 +68,4 @@ export class CartManager {
         carts.splice(cartIndex, 1)
         await fs.writeFile(this.path, JSON.stringify(carts))
         return 'El carrito fue eliminado'
-    }
-}
-//todos los productos
-//http://localhost:8080/api/product/
-
-//un producto
-//http://localhost:8080/api/product/1
-
-//agregar  product
-//http://localhost:8080/api/product/
-
-//actualizar el product
-//http://localhost:8080/api/product/1
-
-//borrar el product
-//http://localhost:8080/api/product/1
-
-//limite de productos
-//http://localhost:8080/api/product?limit=2
-
-//todos los carritos
-//http://localhost:8080/api/cart/
-
-//un carrito
-//http://localhost:8080/api/cart/1
-
-//agregar un producto al carrito
-//http://localhost:8080/api/cart/1/product/1
-//pasar por body quantity
-
-//borrar un carrito
-//http://localhost:8080/api/cart/1
+    }}

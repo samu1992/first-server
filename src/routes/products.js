@@ -1,4 +1,81 @@
-import router from 'express'
+import { Router } from 'express';
+import  Product  from '../models/products.js';
+
+const ProductRouter = Router();
+
+ProductRouter.get('/', async (req, res) => {
+    try {
+        const { limit } = req.query;
+        const products = await Product.find().limit(limit ? parseInt(limit) : undefined);
+        res.send(products);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error al obtener los productos');
+    }
+});
+
+ProductRouter.get('/:id', async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.status(404).send('Producto no encontrado');
+        }
+        res.send(product);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error al obtener el producto');
+    }
+});
+
+ProductRouter.post('/', async (req, res) => {
+    try {
+        const product = new Product(req.body);
+        await product.save();
+        res.send('Producto agregado exitosamente');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error al agregar el producto');
+    }
+});
+
+ProductRouter.put('/:id', async (req, res) => {
+    try {
+        const product = await Product.findByIdAndUpdate(req.params.id, req.body);
+        if (!product) {
+            return res.status(404).send('Producto no encontrado');
+        }
+        res.send('Producto actualizado exitosamente');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error al actualizar el producto');
+    }
+});
+
+ProductRouter.delete('/:id', async (req, res) => {
+    try {
+        const product = await Product.findByIdAndDelete(req.params.id);
+        if (!product) {
+            return res.status(404).send('Producto no encontrado');
+        }
+        res.send('Producto eliminado exitosamente');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error al eliminar el producto');
+    }
+});
+
+export default ProductRouter;
+
+
+
+
+
+
+
+
+
+
+/* import router from 'express'
 import { ProductManager } from "../controllers/ProductManager.js";
 
 
@@ -40,3 +117,4 @@ ProductRouter.delete('/:id', async (req, res) => {
 })
 
 export default ProductRouter
+ */

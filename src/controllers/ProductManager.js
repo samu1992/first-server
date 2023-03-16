@@ -1,73 +1,93 @@
-import { promises as fs } from 'fs'
+const { MongoClient } = require('mongodb');
 
 export class ProductManager {
-    constructor(path) {
-        this.path = path
-    }
-
-    static incrementarID() {
-        if (this.idIncrement) {
-            this.idIncrement++
-        } else {
-            this.idIncrement = 1
-        }
-        return this.idIncrement
+    constructor(connectionString, dbName) {
+        this.connectionString = connectionString;
+        this.dbName = dbName;
     }
 
     async addProduct(producto) {
-        const prods = JSON.parse(await fs.readFile(this.path, 'utf-8'))
-        producto.id = ProductManager.incrementarID()
-        prods.push(producto)
-        await fs.writeFile(this.path, JSON.stringify(prods))
-        return "Producto creado"
+        const client = new MongoClient(this.connectionString);
+        try {
+            await client.connect();
+            const db = client.db(this.dbName);
+            const result = await db.collection('products').insertOne(producto);
+            return "Producto creado";
+        } catch (error) {
+            return error;
+        } finally {
+            await client.close();
+        }
     }
 
     async getProducts(limit) {
+        const client = new MongoClient(this.connectionString);
         try {
-            const prods = JSON.parse(await fs.readFile(this.path, 'utf-8'))
-            return prods.slice(0, limit)
+            await client.connect();
+            const db = client.db(this.dbName);
+            const prods = await db.collection('products').find().limit(limit).toArray();
+            return prods;
         } catch (error) {
-            return error
+            return error;
+        } finally {
+            await client.close();
         }
     }
 
     async getProductById(id) {
-        const prods = JSON.parse(await fs.readFile(this.path, 'utf-8'))
-        if (prods.some(prod => prod.id === parseInt(id))) {
-            return prods.find(prod => prod.id === parseInt(id))
-        } else {
-            return "Producto no encontrado"
+        const client = new MongoClient(this.connectionString);
+        try {
+            await client.connect();
+            const db = client.db(this.dbName);
+            const result = await db.collection('products').findOne({ id: parseInt(id) });
+            if (result) {
+                return result;
+            } else {
+                return "Producto no encontrado";
+            }
+        } catch (error) {
+            return error;
+        } finally {
+            await client.close();
         }
     }
 
     async updateProduct(id, { title, description, price, thumbnail, code, stock, status, category }) {
-        const prods = JSON.parse(await fs.readFile(this.path, 'utf-8'))
-        if (prods.some(prod => prod.id === parseInt(id))) {
-            let index = prods.findIndex(prod => prod.id === parseInt(id))
-            prods[index].title = title
-            prods[index].description = description
-            prods[index].price = price
-            prods[index].thumbnail = thumbnail
-            prods[index].code = code
-            prods[index].stock = stock
-            prods[index].status = status
-            prods[index].category = category
-            await fs.writeFile(this.path, JSON.stringify(prods))
-            return "Producto actualizado"
-        } else {
-            return "Producto no encontrado"
+        const client = new MongoClient(this.connectionString);
+        try {
+            await client.connect();
+            const db = client.db(this.dbName);
+            const result = await db.collection('products').updateOne(
+                { id: parseInt(id) },
+                { $set: { title, description, price, thumbnail, code, stock, status, category } }
+            );
+            if (result.matchedCount === 1) {
+                return "Producto actualizado";
+            } else {
+                return "Producto no encontrado";
+            }
+        } catch (error) {
+            return error;
+        } finally {
+            await client.close();
         }
     }
 
     async deleteProduct(id) {
-        const prods = JSON.parse(await fs.readFile(this.path, 'utf-8'))
-        if (prods.some(prod => prod.id === parseInt(id))) {
-            const prodsFiltrados = prods.filter(prod => prod.id !== parseInt(id))
-            await fs.writeFile(this.path, JSON.stringify(prodsFiltrados))
-            return "Producto eliminado"
-        } else {
-            return "Producto no encontrado"
+        const client = new MongoClient(this.connectionString);
+        try {
+            await client.connect();
+            const db = client.db(this.dbName);
+            const result = await db.collection('products').deleteOne({ id: parseInt(id) });
+            if (result.deletedCount === 1) {
+                return "Producto eliminado";
+            } else {
+                return "Producto no encontrado";
+            }
+        } catch (error) {
+            return error;
+        } finally {
+            await client.close();
         }
     }
-
 }
