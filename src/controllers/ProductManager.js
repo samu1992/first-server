@@ -90,4 +90,5 @@ export class ProductManager {
             await client.close();
         }
     }
+    
 }

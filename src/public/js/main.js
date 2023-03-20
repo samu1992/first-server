@@ -1,8 +1,9 @@
-const socket = io();
-//document.getElementById('productos-template').innerHTML
+import Product from "../../models/products";
+document.getElementById('productos-template').innerHTML
 
 
-socket.on('productos', (data) => {
+
+Product('productos', (data) => {
     console.log(data);
     document.getElementById('productos-container').innerHTML = '';
     data.forEach(element => {
